@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إحصائيات عيادة الرشيدية 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Tajawal:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #64748b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #22c55e;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .upload-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background-color: white;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background-color: #f1f5f9;
+        }
+
+        .custom-file-upload {
+            border: 2px dashed var(--border);
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .custom-file-upload:hover {
+            border-color: var(--primary);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: none;
+            /* hidden until file is loaded */
+        }
+
+        select {
+            padding: 0.5rem 1rem;
+            border-radius: 0.4rem;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            outline: none;
+            min-width: 150px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .report-table th,
+        .report-table td {
+            border: 1px solid #94a3b8;
+            padding: 4px;
+            text-align: center;
+        }
+
+        .report-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: bold;
+        }
+
+        .report-table .num {
+            font-family: 'Outfit', sans-serif;
+            width: 40px;
+        }
+
+        .report-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 700;
+            color: var(--secondary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f1f5f9;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        #loading {
+            display: none;
+            margin: 2rem auto;
+            text-align: center;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>عيادة الرشيدية 2025</h1>
+            <p class="subtitle">نظام نظام الإحصائيات الذكي للمرضى</p>
+        </header>
+
+        <div class="card">
+            <label for="excelFile" class="custom-file-upload" id="dropZone">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"
+                    style="margin-bottom: 10px; color: var(--primary);">
+                    <path
+                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                    <path
+                        d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
+                </svg>
+                <div id="fileStatus">انقر هنا لتحميل ملف Excel أو قم بسحبه وإفلاته</div>
+                <input type="file" id="excelFile" accept=".xlsx,.xls" onchange="handleFile(this)" />
+            </label>
+
+            <div class="filters" id="filterSection">
+                <div>
+                    <label style="margin-left: 10px; font-weight: 500;">اختر الورقة (Sheet):</label>
+                    <select id="sheetFilter" onchange="changeSheet()">
+                        <option value="">-- اختر الورقة --</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="margin-left: 10px; font-weight: 500;">تصفية حسب الشهر:</label>
+                    <select id="monthFilter" onchange="applyFilters()">
+                        <option value="all">كل الأشهر</option>
+                    </select>
+                </div>
+                <div style="flex-grow: 1;"></div>
+                <button class="btn btn-outline" onclick="exportToExcel()">تصدير النتائج</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading">جاري معالجة البيانات...</div>
+
+    <div id="outputSummary" class="card" style="display: none; padding: 0; margin-bottom: 2rem;">
+        <!-- Simple summary table will be injected here -->
+    </div>
+
+    <div id="output" class="card" style="display: none; padding: 0;">
+        <!-- Main matrix table will be injected here -->
+    </div>
+
+    <div id="emptyState" class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <p>يرجى تحميل ملف البيانات لعرض الإحصائيات</p>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
